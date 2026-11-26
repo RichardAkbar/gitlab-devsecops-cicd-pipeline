@@ -67,7 +67,7 @@ deploy:
       echo "=== Pulling New Image ==="
       docker pull "$IMAGE"
 
-      echo "=== Stopping Previous Container ==="
+      echo "=== Removing Previous Container ==="
       docker rm -f "$CONTAINER" || true
 
       echo "=== Starting New Container ==="
@@ -94,7 +94,7 @@ deploy:
 
         if [ -n "$PREVIOUS_IMAGE" ]; then
           docker run -d --name "$CONTAINER" -p 8083:8081 --restart unless-stopped "$PREVIOUS_IMAGE"
-          echo "Rollback started using previous image: $PREVIOUS_IMAGE"
+          echo "Rollback container started using: $PREVIOUS_IMAGE"
         else
           echo "No previous image available for rollback."
         fi
