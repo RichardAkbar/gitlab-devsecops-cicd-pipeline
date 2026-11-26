@@ -52,3 +52,14 @@ deploy:
   script:
     - docker rm -f gitlab-demo-app || true
     - docker run -d --name gitlab-demo-app -p 8083:8081 --restart unless-stopped "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA"
+
+registry_check:
+  stage: security
+  tags:
+    - devsecops
+  script:
+    - echo "Checking GitLab Container Registry..."
+    - echo "CI_REGISTRY=${CI_REGISTRY:-NOT_SET}"
+    - echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE:-NOT_SET}"
+    - echo "CI_REGISTRY_USER=${CI_REGISTRY_USER:+AVAILABLE}"
+    - echo "CI_REGISTRY_PASSWORD=${CI_REGISTRY_PASSWORD:+AVAILABLE}"
