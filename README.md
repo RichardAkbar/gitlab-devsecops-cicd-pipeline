@@ -172,7 +172,6 @@ Project GitLab DevSecOps CI/CD Pipeline berhasil mengimplementasikan otomatisasi
 
 Melalui project ini, proses build, testing, security scanning, pembuatan Docker image, dan deployment dapat dikelola melalui satu pipeline terintegrasi. Penggunaan GitLab CI/CD Variables juga membantu memisahkan kredensial autentikasi dari source code.
 
-Project ini memberikan pengalaman praktis dalam membangun workflow DevSecOps serta memahami proses otomatisasi deployment aplikasi berbasis container.
 
 ## 8. Repository Links
 
