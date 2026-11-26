@@ -34,9 +34,12 @@ Arsitektur project menggunakan GitLab sebagai pusat pengelolaan source code dan 
 
 Alur proses dimulai ketika perubahan source code tersedia pada repository GitLab. Selanjutnya, pipeline menjalankan proses build dan testing aplikasi, dilanjutkan dengan security scanning menggunakan Trivy. Setelah tahapan tersebut, aplikasi dikemas menjadi Docker image dan dikirim ke Docker Hub. Tahap deployment kemudian dijalankan untuk memperbarui container aplikasi dan melakukan pemeriksaan kesehatan aplikasi.
 
+![alt text](arsitektur.png)
+
 **Alur CI/CD Pipeline:**
 
 `GitLab Repository → Build → Test → Security Scan → Docker Build → Docker Hub → Deploy → Health Check`
+
 
 ## 5. Project Implementation
 
