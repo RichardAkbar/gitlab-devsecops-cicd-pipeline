@@ -1,0 +1,54 @@
+stages:
+  - build
+  - test
+  - security
+  - docker_build
+  - deploy
+
+variables:
+  APP_DIR: "application/demo-app"
+  IMAGE_NAME: "gitlab-devsecops-demo-app"
+
+build:
+  stage: build
+  tags:
+    - devsecops
+  script:
+    - cd "$APP_DIR"
+    - chmod +x mvnw
+    - ./mvnw -B -DskipTests package
+  artifacts:
+    paths:
+      - application/demo-app/target/*.jar
+    expire_in: 1 day
+
+test:
+  stage: test
+  tags:
+    - devsecops
+  script:
+    - cd "$APP_DIR"
+    - ./mvnw -B test
+
+security_scan:
+  stage: security
+  tags:
+    - devsecops
+  script:
+    - trivy fs --scanners vuln,misconfig,secret --exit-code 0 --format table .
+
+docker_build:
+  stage: docker_build
+  tags:
+    - devsecops
+  script:
+    - docker build -t "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA" -f "$APP_DIR/Dockerfile" "$APP_DIR"
+
+deploy:
+  stage: deploy
+  tags:
+    - devsecops
+  when: manual
+  script:
+    - docker rm -f gitlab-demo-app || true
+    - docker run -d --name gitlab-demo-app -p 8083:8081 --restart unless-stopped "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA"
