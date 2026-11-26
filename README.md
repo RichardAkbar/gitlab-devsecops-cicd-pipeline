@@ -49,7 +49,7 @@ Repository ini memiliki folder `application/demo-app` yang berisi source code ap
 Pemisahan direktori tersebut membantu mengorganisasi source code aplikasi dan konfigurasi deployment agar lebih mudah dikelola.
 
 **Screenshot:**
-![alt text](<GitLab Repository.png>)
+![alt text](<deployment/kubernetes/GitLab Repository.png>)
 
 *Gambar 1. Halaman repository GitLab yang menampilkan struktur project, source code aplikasi, konfigurasi deployment, dan file CI/CD Pipeline.*
 
@@ -62,7 +62,7 @@ Runner didaftarkan dengan nama `gitlab-host-runner` dan menggunakan tag `devseco
 Setelah proses registrasi berhasil diverifikasi, konfigurasi runner disimpan pada file `/etc/gitlab-runner/config.toml` dan service GitLab Runner dijalankan.
 
 **Screenshot:**
-![alt text](gitlabr-runner.png)
+![alt text](deployment/kubernetes/gitlabr-runner.png)
 
 *Gambar 2. Proses registrasi GitLab Runner menggunakan Shell Executor serta verifikasi koneksi antara GitLab Runner dan GitLab Server.*
 
@@ -76,7 +76,7 @@ Kedua variabel tersebut dikonfigurasi melalui pengaturan CI/CD Variables pada pr
 
 **Screenshot:**
 
-![alt text](<../../GitLab CI/CD Variables.png>)
+![alt text](<GitLab CI/CicD Variables.png>)
 
 *Gambar 3. Konfigurasi GitLab CI/CD Variables untuk menyimpan kredensial Docker Hub secara terpisah dari source code.*
 
@@ -91,7 +91,7 @@ Tahap Build digunakan untuk mengompilasi aplikasi menggunakan Maven. Tahap Test 
 Selanjutnya, tahap Docker Build digunakan untuk membuat Docker image berdasarkan Dockerfile. Tahap Deploy digunakan untuk menjalankan proses deployment aplikasi dan dikonfigurasi agar dapat dijalankan secara manual.
 
 **Screenshot:**
-![alt text](<../../pipeline stages.png>)
+![alt text](<pipeline stages.png>)
 
 *Gambar 4. Visualisasi lima tahapan GitLab CI/CD Pipeline yang terdiri dari Build, Test, Security, Docker Build, dan Deploy.*
 
@@ -105,7 +105,7 @@ Keberhasilan tersebut menunjukkan bahwa seluruh job pada eksekusi pipeline yang 
 
 **Screenshot:
 
-![alt text](<../../Pipeline Passed.png>)
+![alt text](<Pipeline Passed.png>)
 
 *Gambar 5. Hasil eksekusi GitLab CI/CD Pipeline dengan status Passed yang menunjukkan tahapan pipeline berhasil diselesaikan.*
 
@@ -118,7 +118,7 @@ Repository Docker Hub yang digunakan adalah `richardakbar/gitlab-devsecops-demo-
 Penggunaan tag commit SHA membantu mengidentifikasi versi image berdasarkan commit source code yang digunakan. Dengan demikian, image dapat ditelusuri berdasarkan versi perubahan aplikasi.
 
 **Screenshot:**
-![alt text](../../dockerhub.png)
+![alt text](dockerhub.png)
 
 *Gambar 6. Repository Docker Hub yang menampilkan Docker image aplikasi dengan tag latest dan commit SHA 167edf27.*
 
@@ -135,7 +135,7 @@ Setelah container dijalankan, pipeline melakukan health check melalui endpoint `
 Berdasarkan log deployment, aplikasi memberikan respons `UP` dengan informasi `GitLab DevSecOps Demo App`. Proses deployment kemudian dinyatakan berhasil dan job berakhir dengan status `Job succeeded`.
 
 **Screenshot:**
-![alt text](../../jobdedploy.png)
+![alt text](jobdedploy.png)
 
 
 *Gambar 7. Log deployment yang menunjukkan proses pull Docker image, pembaruan container, serta health check dengan respons aplikasi berstatus UP.*
@@ -149,7 +149,7 @@ Dashboard menampilkan informasi mengenai status aplikasi, health status, versi a
 Berdasarkan tampilan dashboard, aplikasi menunjukkan status `Running` dan health status `UP`. Informasi tersebut menjadi bukti bahwa aplikasi berhasil dijalankan dan dapat diakses melalui browser setelah proses deployment.
 
 **Screenshot:**
-![alt text](../../dashboard.png)
+![alt text](dashboard.png)
 
 *Gambar 8. Tampilan Application Monitoring Dashboard yang menunjukkan aplikasi berjalan dengan status Running dan Health Status UP.*
 
