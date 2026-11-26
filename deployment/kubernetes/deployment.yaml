@@ -23,7 +23,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: demo-app
-          image: REPLACE_WITH_REGISTRY_IMAGE
+          image: richardakbar/gitlab-devsecops-demo-app:167edf27
           imagePullPolicy: Always
           ports:
             - name: http
