@@ -57,5 +57,47 @@ deploy:
     - devsecops
   when: manual
   script:
-    - docker rm -f gitlab-demo-app || true
-    - docker run -d --name gitlab-demo-app -p 8083:8081 --restart unless-stopped "$DOCKERHUB_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - |
+      set -Eeuo pipefail
+
+      IMAGE="$DOCKERHUB_IMAGE:$CI_COMMIT_SHORT_SHA"
+      CONTAINER="gitlab-demo-app"
+      PREVIOUS_IMAGE="$(docker inspect --format '{{.Config.Image}}' "$CONTAINER" 2>/dev/null || true)"
+
+      echo "=== Pulling New Image ==="
+      docker pull "$IMAGE"
+
+      echo "=== Stopping Previous Container ==="
+      docker rm -f "$CONTAINER" || true
+
+      echo "=== Starting New Container ==="
+      docker run -d --name "$CONTAINER" -p 8083:8081 --restart unless-stopped "$IMAGE"
+
+      echo "=== Application Health Check ==="
+      HEALTHY=false
+
+      for attempt in $(seq 1 30); do
+        if curl --fail --silent http://localhost:8083/health; then
+          echo
+          HEALTHY=true
+          break
+        fi
+        echo "Waiting for application... ($attempt/30)"
+        sleep 2
+      done
+
+      if [ "$HEALTHY" = true ]; then
+        echo "Deployment successful. Application is healthy."
+      else
+        echo "Deployment failed. Starting rollback..."
+        docker rm -f "$CONTAINER" || true
+
+        if [ -n "$PREVIOUS_IMAGE" ]; then
+          docker run -d --name "$CONTAINER" -p 8083:8081 --restart unless-stopped "$PREVIOUS_IMAGE"
+          echo "Rollback started using previous image: $PREVIOUS_IMAGE"
+        else
+          echo "No previous image available for rollback."
+        fi
+
+        exit 1
+      fi
